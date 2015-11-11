@@ -32,11 +32,16 @@ var fs = require('fs');
 var keyIndex = parseInt(Math.random() * 100);
 
 module.exports = function (content, file, conf) {
-  if (typeof conf.key instanceof Array) {
-    tinify.key = conf.key[(keyIndex++) % conf.key.length];
+  var key;
+  if (conf.key instanceof Array) {
+    key = conf.key[(keyIndex++) % conf.key.length];
   } else {
-    tinify.key = conf.key; // "YOUR_API_KEY";
+    key = conf.key; // "YOUR_API_KEY";
   }
+  if (!key) {
+    throw new Error('config "key" undefined.');
+  }
+  tinify.key = key;
   var compress = deasync(function (content, callback) {
     var image;
     if (conf.cacheDir) {
