@@ -29,11 +29,11 @@ var mkdirp = require('mkdirp');
 var path = require('path');
 var fs = require('fs');
 
-var keyIndex = 0;
+var keyIndex = parseInt(Math.random() * 100);
 
 module.exports = function (content, file, conf) {
   if (typeof conf.key instanceof Array) {
-    tinify.key = conf.key[(keyIndex++) % conf.key];
+    tinify.key = conf.key[(keyIndex++) % conf.key.length];
   } else {
     tinify.key = conf.key; // "YOUR_API_KEY";
   }

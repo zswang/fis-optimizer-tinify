@@ -2,7 +2,7 @@
   "name": "fis-optimizer-tinify",
   "title": "fis optimizer region",
   "description": "fis optimizer plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/zswang/fis-optimizer-tinify",
   "main": "index.js",
   "author": {

@@ -1,1 +1,1 @@
-module.exports = require('./src/tinify');
+module.exports = require('./lib/tinify');
