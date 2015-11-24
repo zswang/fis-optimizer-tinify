@@ -65,9 +65,9 @@ module.exports = function (content, file, conf) {
       }
       callback(null, data);
     }).catch(function (error) {
-      console.error('tinify.key: %s', tinify.key);
+      console.error('Error: tinify.key: %s', key);
       callback(error);
-    })
+    });
   });
   return compress(content);
 };
