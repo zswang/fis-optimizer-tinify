@@ -32,16 +32,6 @@ var fs = require('fs');
 var keyIndex = parseInt(Math.random() * 100);
 
 module.exports = function (content, file, conf) {
-  var key;
-  if (conf.key instanceof Array) {
-    key = conf.key[(keyIndex++) % conf.key.length];
-  } else {
-    key = conf.key; // "YOUR_API_KEY";
-  }
-  if (!key) {
-    throw new Error('config "key" undefined.');
-  }
-  tinify.key = key;
   var compress = deasync(function (content, callback) {
     var image;
     if (conf.cacheDir) {
@@ -59,15 +49,50 @@ module.exports = function (content, file, conf) {
       }
     }
 
-    tinify.Source.fromBuffer(content).toBuffer().then(function (data) {
-      if (image) {
-        fs.writeFileSync(image, data); // 缓存
+    /**
+     * 尝试上传
+     * @param correction 是否纠错
+     */
+    function attempt(correction) {
+      var key;
+      var lastError;
+      var firstKeyIndex;
+      if (conf.key instanceof Array) {
+        keyIndex = (keyIndex++) % conf.key.length;
+        if (correction) {
+          if (firstKeyIndex === keyIndex) {
+            callback(lastError);
+            return;
+          }
+        } else {
+          firstKeyIndex = keyIndex
+        }
+        key = conf.key[keyIndex];
+      } else {
+        if (correction) {
+          callback(lastError);
+          return;
+        }
+        key = conf.key; // "YOUR_API_KEY";
       }
-      callback(null, data);
-    }).catch(function (error) {
-      console.error('Error: tinify.key: %s', key);
-      callback(error);
-    });
+      if (!key) {
+        throw new Error('config "key" undefined.');
+      }
+
+      tinify.key = key;
+      tinify.Source.fromBuffer(content).toBuffer().then(function (data) {
+        if (image) {
+          fs.writeFileSync(image, data); // 缓存
+        }
+        callback(null, data);
+      }).catch(function (error) {
+        lastError = error;
+        attempt(true);
+        console.error('Error: tinify.key: %s', key);
+      });
+    }
+
+    attempt(false);
   });
   return compress(content);
 };
