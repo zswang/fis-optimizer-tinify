@@ -65,7 +65,7 @@ module.exports = function (content, file, conf) {
             return;
           }
         } else {
-          firstKeyIndex = keyIndex
+          firstKeyIndex = keyIndex;
         }
         key = conf.key[keyIndex];
       } else {
