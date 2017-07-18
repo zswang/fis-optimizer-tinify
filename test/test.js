@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 
 describe('fixtures', function() {
-  var key = 'your key';
+  var key = process.env.TINIFY_KEY;
   this.timeout(35000);
   it('compress:cache', function() {
     var input = path.join(__dirname, 'png/source.png');
