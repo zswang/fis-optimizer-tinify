@@ -30,6 +30,7 @@ var path = require('path');
 var fs = require('fs');
 
 var keyIndex = parseInt(Math.random() * 100);
+var blacklist = {};
 
 module.exports = function (content, file, conf) {
   var compress = deasync(function (content, callback) {
@@ -58,7 +59,7 @@ module.exports = function (content, file, conf) {
       var lastError;
       var firstKeyIndex;
       if (conf.key instanceof Array) {
-        keyIndex = (keyIndex++) % conf.key.length;
+        keyIndex = (keyIndex + 1) % conf.key.length;
         if (correction) {
           if (firstKeyIndex === keyIndex) {
             callback(lastError);
@@ -79,6 +80,11 @@ module.exports = function (content, file, conf) {
         throw new Error('config "key" undefined.');
       }
 
+      if (blacklist[key]) {
+        attempt(true);
+        return;
+      }
+
       tinify.key = key;
       tinify.Source.fromBuffer(content).toBuffer().then(function (data) {
         if (image) {
@@ -88,6 +94,7 @@ module.exports = function (content, file, conf) {
       }).catch(function (error) {
         lastError = error;
         attempt(true);
+        blacklist[key] = true;
         console.error('Error: tinify.key: %s', key);
       });
     }
