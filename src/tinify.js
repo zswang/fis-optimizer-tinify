@@ -85,6 +85,10 @@ module.exports = function (content, file, conf) {
         return;
       }
 
+      if (conf.debug) {
+        // 关键信息
+        console.log('\nkey: %j flag: %j filename: %j', key, flag, file.realpath);
+      }
       tinify.key = key;
       tinify.Source.fromBuffer(content).toBuffer().then(function (data) {
         if (image) {
