@@ -2,7 +2,7 @@
   "name": "fis-optimizer-tinify",
   "title": "fis optimizer region",
   "description": "fis optimizer plugin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "homepage": "https://github.com/zswang/fis-optimizer-tinify",
   "main": "index.js",
   "author": {
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "deasync": "^0.1.10",
+    "is-png": "^1.1.0",
     "mkdirp": "^0.5.0",
     "tinify": "^1.5.0"
   },
