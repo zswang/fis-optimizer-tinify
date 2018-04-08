@@ -35,6 +35,7 @@ var blacklist = {};
 
 module.exports = function(content, file, conf) {
   if (!isPng(new Buffer(content).slice(0, 8))) {
+    console.log('%j is not PNG format.', file.filename)
     // 非 png 直接返回
     return content;
   }
